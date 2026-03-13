@@ -330,13 +330,7 @@ class ExplainabilityScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 12),
                             Text(
-                              prediction.isMurmur
-                                  ? 'The AI detected abnormal patterns in the frequency range of 100-300 Hz, '
-                                        'which is consistent with systolic murmur characteristics. The S1 amplitude '
-                                        'and systolic duration were the most significant features in this classification.'
-                                  : 'The heart sound shows normal S1 and S2 patterns with no abnormal frequency '
-                                        'components detected. The signal-to-noise ratio was adequate for reliable '
-                                        'classification with high confidence.',
+                              prediction.interpretation,
                               style: GoogleFonts.inter(
                                 fontSize: 13,
                                 color: AppColors.textOnDarkSecondary,

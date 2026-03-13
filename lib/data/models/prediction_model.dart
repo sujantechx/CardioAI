@@ -13,6 +13,7 @@ class PredictionModel extends Equatable {
   final Map<String, double> featureImportance;
   final SignalStats signalStats;
   final DateTime predictedAt;
+  final String interpretation;
 
   const PredictionModel({
     required this.id,
@@ -27,6 +28,7 @@ class PredictionModel extends Equatable {
     required this.featureImportance,
     required this.signalStats,
     required this.predictedAt,
+    this.interpretation = 'The AI model evaluated this scan and found no significant issues. Normal physiological parameters observed.',
   });
 
   bool get isMurmur => result == 'Murmur';

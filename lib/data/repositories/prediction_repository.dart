@@ -1,20 +1,13 @@
-import 'dart:math';
+import 'dart:typed_data';
+import '../../core/network/api_client.dart';
 import '../models/patient_model.dart';
 import '../models/prediction_model.dart';
-import '../../core/utils/dummy_data.dart';
 
 class PredictionRepository {
-  // Simulate prediction API call
-  Future<PredictionModel> predict(PatientModel patient) async {
-    // Simulate processing time
-    await Future.delayed(const Duration(seconds: 3));
+  final ApiClient _apiClient = ApiClient();
 
-    // Randomly decide normal or murmur for demo
-    final random = Random();
-    if (random.nextDouble() > 0.4) {
-      return DummyData.generateNormalPrediction();
-    } else {
-      return DummyData.generateMurmurPrediction();
-    }
+  /// Call the FastAPI prediction endpoint instead of dummy data
+  Future<PredictionModel> predict(PatientModel patient, Uint8List audioBytes, String fileName) async {
+    return await _apiClient.predictHeartSound(audioBytes, fileName, patient);
   }
 }

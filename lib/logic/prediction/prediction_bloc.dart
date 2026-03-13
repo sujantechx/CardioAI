@@ -19,7 +19,11 @@ class PredictionBloc extends Bloc<PredictionEvent, PredictionState> {
   ) async {
     emit(PredictionLoading());
     try {
-      final prediction = await _predictionRepository.predict(event.patient);
+      final prediction = await _predictionRepository.predict(
+        event.patient, 
+        event.audioBytes, 
+        event.fileName,
+      );
       emit(PredictionSuccess(prediction: prediction, patient: event.patient));
     } catch (e) {
       emit(PredictionError(e.toString()));

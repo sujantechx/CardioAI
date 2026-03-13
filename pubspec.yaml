@@ -47,6 +47,7 @@ dependencies:
   shared_preferences: ^2.5.4
   smooth_page_indicator: ^2.0.1
   intl: ^0.20.2
+  http: ^1.2.0
 
 dev_dependencies:
   flutter_test:
@@ -87,6 +88,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/app logo.png
+    - assets/hart_sound/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

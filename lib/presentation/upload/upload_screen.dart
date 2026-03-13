@@ -1,8 +1,12 @@
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import '../../config/themes/app_colors.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/widgets/custom_button.dart';
@@ -29,6 +33,7 @@ class _UploadScreenState extends State<UploadScreen> {
   String _selectedLocation = AppConstants.recordingLocations[0];
   String? _selectedFilePath;
   String? _selectedFileName;
+  Uint8List? _selectedFileBytes;
 
   @override
   void dispose() {
@@ -102,7 +107,24 @@ class _UploadScreenState extends State<UploadScreen> {
                         children: [
                           // File Upload Area
                           _buildFileUploadArea(),
-                          const SizedBox(height: 24),
+                          const SizedBox(height: 12),
+                          Center(
+                            child: TextButton.icon(
+                              onPressed: _showSampleSelector,
+                              icon: const Icon(
+                                Icons.music_note_rounded,
+                                color: AppColors.primary,
+                              ),
+                              label: Text(
+                                'Use Sample Heart Sound',
+                                style: GoogleFonts.inter(
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
 
                           // Patient Information
                           Text(
@@ -200,7 +222,7 @@ class _UploadScreenState extends State<UploadScreen> {
                                 const SizedBox(width: 10),
                                 Expanded(
                                   child: Text(
-                                    'For demo purposes, dummy data will be used. Backend integration coming soon.',
+                                    'Audio must be a valid stethoscope recording (.wav, .mp3, .flac). Non-heart sounds will be rejected by the AI.',
                                     style: GoogleFonts.inter(
                                       fontSize: 12,
                                       color: AppColors.textOnDarkSecondary,
@@ -364,37 +386,155 @@ class _UploadScreenState extends State<UploadScreen> {
       final result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['wav', 'mp3', 'flac'],
+        withData: true,
       );
 
-      if (result != null && result.files.single.path != null) {
-        setState(() {
-          _selectedFilePath = result.files.single.path;
-          _selectedFileName = result.files.single.name;
-        });
+      if (result != null) {
+        if (result.files.single.bytes != null) {
+          setState(() {
+            _selectedFilePath = result.files.single.path ?? 'picked_file';
+            _selectedFileName = result.files.single.name;
+            _selectedFileBytes = result.files.single.bytes;
+          });
+        } else if (!kIsWeb && result.files.single.path != null) {
+          final file = File(result.files.single.path!);
+          final bytes = await file.readAsBytes();
+          setState(() {
+            _selectedFilePath = result.files.single.path;
+            _selectedFileName = result.files.single.name;
+            _selectedFileBytes = bytes;
+          });
+        }
       }
     } catch (e) {
-      // For demo, just set a dummy file
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error picking file: $e'),
+          backgroundColor: AppColors.error,
+        ),
+      );
+    }
+  }
+
+  void _showSampleSelector() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColors.surfaceDark,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        final samples = [
+          '2530_AV.wav',
+          '2530_MV.wav',
+          '2530_PV.wav',
+          '2530_TV.wav',
+        ];
+
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Select Sample Recording',
+                  style: GoogleFonts.outfit(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textOnDark,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                ...samples.map(
+                  (filename) => ListTile(
+                    leading: const Icon(
+                      Icons.audio_file,
+                      color: AppColors.primary,
+                    ),
+                    title: Text(
+                      filename,
+                      style: const TextStyle(color: AppColors.textOnDark),
+                    ),
+                    subtitle: const Text(
+                      'assets/hart_sound/',
+                      style: TextStyle(
+                        color: AppColors.textOnDarkSecondary,
+                        fontSize: 12,
+                      ),
+                    ),
+                    onTap: () {
+                      context.pop();
+                      _loadSampleAsset(filename);
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _loadSampleAsset(String filename) async {
+    try {
+      final byteData = await rootBundle.load('assets/hart_sound/$filename');
+      final bytes = byteData.buffer.asUint8List();
+
       setState(() {
-        _selectedFilePath = '/dummy/heartbeat.wav';
-        _selectedFileName = 'heartbeat_recording.wav';
+        _selectedFilePath = 'assets/hart_sound/$filename';
+        _selectedFileName = filename;
+        _selectedFileBytes = bytes;
       });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Loaded sample: $filename'),
+          backgroundColor: AppColors.success,
+        ),
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error loading sample: $e'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+      }
     }
   }
 
   void _onSubmit() {
     if (_formKey.currentState?.validate() ?? false) {
-      // Allow submission even without file for demo
+      if (_selectedFileBytes == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please select an audio file to analyze'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+        return;
+      }
+
       final patient = PatientModel(
         name: _nameController.text.trim(),
         age: int.parse(_ageController.text.trim()),
         gender: _selectedGender,
         recordingLocation: _selectedLocation,
         audioFilePath: _selectedFilePath,
-        audioFileName: _selectedFileName ?? 'demo_recording.wav',
+        audioFileName: _selectedFileName ?? 'heart_sound.wav',
         recordedAt: DateTime.now(),
       );
 
-      context.read<PredictionBloc>().add(PredictionRequested(patient));
+      context.read<PredictionBloc>().add(
+        PredictionRequested(
+          patient, 
+          _selectedFileBytes!, 
+          _selectedFileName ?? 'heart_sound.wav'
+        ),
+      );
     }
   }
 }
