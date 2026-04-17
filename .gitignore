@@ -76,6 +76,7 @@ venv.bak/
 *.jpeg
 !assets/app logo.png
 !assets/hart_sound/
+!assets/UI/
 
 # ==============================================================================
 # OS Generated Files

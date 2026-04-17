@@ -47,6 +47,39 @@ The system utilizes an automated **Audio Preprocessor pipeline** (PCM to Mel Spe
 
 ---
 
+## 📸 UI Showcase
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center"><b>🏠 Home Dashboard</b></td>
+      <td align="center"><b>📤 Audio Upload</b></td>
+      <td align="center"><b>📊 Signal Analysis 1</b></td>
+      <td align="center"><b>📊 Signal Analysis 2</b></td>
+    </tr>
+    <tr>
+      <td><img src="assets/UI/home.jpg" width="220" alt="Home Screen"></td>
+      <td><img src="assets/UI/uplod.jpg" width="220" alt="Upload Screen"></td>
+      <td><img src="assets/UI/signal_1.jpg" width="220" alt="Signal 1"></td>
+      <td><img src="assets/UI/signal_2.jpg" width="220" alt="Signal 2"></td>
+    </tr>
+    <tr>
+      <td align="center"><b>📈 Signal Analysis 3</b></td>
+      <td align="center"><b>🧠 Explainable AI</b></td>
+      <td align="center"><b>📄 PDF Report</b></td>
+      <td align="center"><b></b></td>
+    </tr>
+    <tr>
+      <td><img src="assets/UI/signal_3.jpg" width="220" alt="Signal 3"></td>
+      <td><img src="assets/UI/ai%20Explen.jpg" width="220" alt="Explainable AI"></td>
+      <td><img src="assets/UI/report.jpg" width="220" alt="Report Screen"></td>
+      <td></td>
+    </tr>
+  </table>
+</div>
+
+---
+
 ## 🏗 Architecture & Tech Stack
 
 ### 1. Mobile Client (Frontend)
