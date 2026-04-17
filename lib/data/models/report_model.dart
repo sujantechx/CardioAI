@@ -33,6 +33,26 @@ class ReportModel extends Equatable {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'patient': patient.toJson(),
+      'prediction': prediction.toJson(),
+      'generatedAt': generatedAt.toIso8601String(),
+      'pdfPath': pdfPath,
+    };
+  }
+
+  factory ReportModel.fromJson(Map<String, dynamic> json) {
+    return ReportModel(
+      id: json['id'] as String,
+      patient: PatientModel.fromJson(json['patient'] as Map<String, dynamic>),
+      prediction: PredictionModel.fromJson(json['prediction'] as Map<String, dynamic>),
+      generatedAt: DateTime.parse(json['generatedAt'] as String),
+      pdfPath: json['pdfPath'] as String?,
+    );
+  }
+
   @override
   List<Object?> get props => [id, patient, prediction, generatedAt, pdfPath];
 }

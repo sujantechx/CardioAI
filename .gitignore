@@ -1,45 +1,97 @@
-# Miscellaneous
-*.class
-*.log
-*.pyc
-*.swp
-.DS_Store
-.atom/
-.build/
-.buildlog/
-.history
-.svn/
-.swiftpm/
-migrate_working_dir/
-
-# IntelliJ related
-*.iml
-*.ipr
-*.iws
-.idea/
-
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
-
-# Flutter/Dart/Pub related
-**/doc/api/
-**/ios/Flutter/.last_build_id
+# ==============================================================================
+# Flutter & Dart
+# ==============================================================================
 .dart_tool/
+.flutter-plugins
 .flutter-plugins-dependencies
 .pub-cache/
 .pub/
 /build/
 /coverage/
+*.iml
+*.ipr
+*.iws
 
-# Symbolication related
-app.*.symbols
-
-# Obfuscation related
-app.*.map.json
-
-# Android Studio will place build artifacts here
+# Android Studio / Xcode
+.idea/
 /android/app/debug
 /android/app/profile
 /android/app/release
+/android/.gradle
+**/ios/Flutter/.last_build_id
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/app.flx
+**/ios/Flutter/app.zip
+**/ios/Flutter/flutter_assets/
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/Pods/
+
+# Symbolication and Obfuscation
+app.*.symbols
+app.*.map.json
+
+# ==============================================================================
+# Python & Deep Learning (Backend / Colab)
+# ==============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Environments
+.env
+.venv/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# PyTorch / Models / Checkpoints
+*.pth
+*.pt
+*.cpkt
+*.ckpt
+*.h5
+*.onnx
+*.weights
+!assets/models/classifier_quantized.onnx # (We EXPLICITLY want to track the compressed app model)
+
+# Datasets and Exports (Preventing massive GitHub uploads)
+/validation/
+/training-a/
+/training-b/
+/training-c/
+/training-d/
+/training-e/
+/training-f/
+/flutter_export/
+*.wav
+*.mp3
+*.flac
+*.png
+*.jpg
+*.jpeg
+!assets/app logo.png
+!assets/hart_sound/
+
+# ==============================================================================
+# OS Generated Files
+# ==============================================================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# VS Code
+.vscode/
+
+# Logs and DBs
+*.log
+*.sqlite
+*.db

@@ -1,0 +1,48 @@
+version: '3.9'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cardioai-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - LOG_LEVEL=INFO
+      - DEVICE=cpu  # Change to 'cuda' if GPU available
+    volumes:
+      - ./backend:/app:cached
+    networks:
+      - cardioai-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: Add PostgreSQL for future use
+  # db:
+  #   image: postgres:15-alpine
+  #   container_name: cardioai-db
+  #   environment:
+  #     POSTGRES_USER: cardioai
+  #     POSTGRES_PASSWORD: cardioai_dev_pass
+  #     POSTGRES_DB: cardioai
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   networks:
+  #     - cardioai-network
+
+networks:
+  cardioai-network:
+    driver: bridge
+
+# volumes:
+#   postgres_data:
+

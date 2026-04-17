@@ -222,7 +222,7 @@ class _UploadScreenState extends State<UploadScreen> {
                                 const SizedBox(width: 10),
                                 Expanded(
                                   child: Text(
-                                    'Audio must be a valid stethoscope recording (.wav, .mp3, .flac). Non-heart sounds will be rejected by the AI.',
+                                    'Audio must be a valid stethoscope recording (.wav format). Non-heart sounds will be rejected by the AI.',
                                     style: GoogleFonts.inter(
                                       fontSize: 12,
                                       color: AppColors.textOnDarkSecondary,
@@ -385,7 +385,7 @@ class _UploadScreenState extends State<UploadScreen> {
     try {
       final result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: ['wav', 'mp3', 'flac'],
+        allowedExtensions: ['wav'],
         withData: true,
       );
 

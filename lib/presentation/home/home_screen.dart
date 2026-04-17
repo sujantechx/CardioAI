@@ -400,7 +400,7 @@ class HomeScreen extends StatelessWidget {
         crossAxisCount: 4,
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
-        childAspectRatio: 0.85,
+        childAspectRatio: 0.75, // Lowered from 0.85 to add more vertical height
       ),
       itemCount: features.length,
       itemBuilder: (context, index) {
@@ -434,16 +434,19 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 8),
-              Text(
-                feature.title,
-                style: GoogleFonts.inter(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w500,
-                  color: feature.locked
-                      ? AppColors.textOnDarkSecondary
-                      : AppColors.textOnDark,
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  feature.title,
+                  style: GoogleFonts.inter(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w500,
+                    color: feature.locked
+                        ? AppColors.textOnDarkSecondary
+                        : AppColors.textOnDark,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
               ),
             ],
           ),
