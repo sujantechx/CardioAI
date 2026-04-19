@@ -69,20 +69,16 @@ venv.bak/
 /training-f/
 /flutter_export/
 *.wav
+*.wav
 *.mp3
 *.flac
 *.png
 *.jpg
 *.jpeg
 !assets/app logo.png
-!assets/hart_sound/
-!assets/UI/
+!assets/hart_sound/**
+!assets/UI/**
 
-# ==============================================================================
-# OS Generated Files
-# ==============================================================================
-.DS_Store
-.DS_Store?
 ._*
 .Spotlight-V100
 .Trashes
